@@ -256,4 +256,4 @@ MIT © RayStudio
 
 ---
 
-*Built for Apple Silicon — M1 through M4 Pro/Max/Ultra*
+**Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) &nbsp;·&nbsp; **Status:** Active &nbsp;·&nbsp; **Last Updated:** Juni 2026
