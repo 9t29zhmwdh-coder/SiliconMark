@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SiliconMark Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d0f14;
+      --surface: #161a23;
+      --border:  #252b39;
+      --accent:  #4f9cf9;
+      --green:   #3ecf8e;
+      --amber:   #f7a23b;
+      --red:     #f76363;
+      --text:    #e2e8f0;
+      --muted:   #6b7280;
+      --radius:  10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    header svg { color: var(--accent); flex-shrink: 0; }
+    header h1  { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    header span { color: var(--muted); font-size: 13px; }
+
+    #filter-bar {
+      display: flex;
+      gap: 10px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    #filter-bar label { color: var(--muted); font-size: 12px; }
+    #filter-bar select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    main { padding: 24px 28px; display: flex; flex-direction: column; gap: 28px; }
+
+    /* ── charts ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .card h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .chart-wrap { position: relative; height: 220px; }
+
+    /* ── table ── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-card h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 16px 20px 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      text-align: left;
+      padding: 8px 14px;
+      color: var(--muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(79, 156, 249, 0.05); }
+    tbody td {
+      padding: 9px 14px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(79, 156, 249, 0.15);
+      color: var(--accent);
+    }
+    .badge.ollama   { background: rgba(62, 207, 142, 0.15); color: var(--green); }
+    .badge.llamacpp { background: rgba(247, 162, 59, 0.15);  color: var(--amber); }
+    .badge.mlc      { background: rgba(247, 99,  99, 0.15);  color: var(--red);   }
+    .badge.gguf     { background: rgba(79,  156, 249, 0.15); color: var(--accent); }
+
+    .tps-cell { font-weight: 700; color: var(--green); }
+
+    #empty {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--muted);
+    }
+    #empty code {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 14px;
+      background: var(--border);
+      border-radius: 6px;
+      font-family: "SF Mono", monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+  </svg>
+  <div>
+    <h1>SiliconMark Dashboard</h1>
+    <span id="device-label">Loading…</span>
+  </div>
+</header>
+
+<div id="filter-bar">
+  <label>Runtime</label>
+  <select id="filter-runtime"><option value="">All</option></select>
+  <label>Model</label>
+  <select id="filter-model"><option value="">All</option></select>
+</div>
+
+<main>
+  <div id="empty" style="display:none">
+    <p>No benchmark results yet.</p>
+    <code>siliconmark run --runtime ollama --model llama3.2:3b</code>
+  </div>
+
+  <div class="charts-grid" id="charts">
+    <div class="card">
+      <h2>Tokens / s</h2>
+      <div class="chart-wrap"><canvas id="chart-tps"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>RAM Peak (GB)</h2>
+      <div class="chart-wrap"><canvas id="chart-ram"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Package Power (mW)</h2>
+      <div class="chart-wrap"><canvas id="chart-power"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Time to First Token (ms)</h2>
+      <div class="chart-wrap"><canvas id="chart-ttft"></canvas></div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h2>All Results</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Runtime</th>
+          <th>Model</th>
+          <th>Tokens / s</th>
+          <th>Tokens</th>
+          <th>Duration</th>
+          <th>TTFT</th>
+          <th>RAM Peak</th>
+          <th>CPU %</th>
+          <th>Power (mW)</th>
+          <th>Temp</th>
+        </tr>
+      </thead>
+      <tbody id="results-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  const PALETTE = [
+    "#4f9cf9","#3ecf8e","#f7a23b","#f76363",
+    "#a78bfa","#34d399","#fb923c","#f472b6",
+  ];
+
+  let allResults = [];
+  let charts = {};
+
+  async function loadResults() {
+    const resp = await fetch("/api/results");
+    allResults = await resp.json();
+    if (allResults.length === 0) {
+      document.getElementById("empty").style.display = "block";
+      document.getElementById("charts").style.display = "none";
+      return;
+    }
+    populateFilters();
+    render();
+  }
+
+  function populateFilters() {
+    const runtimes = [...new Set(allResults.map(r => r.config.runtime))];
+    const models   = [...new Set(allResults.map(r => r.config.model.name))];
+    const rSel = document.getElementById("filter-runtime");
+    const mSel = document.getElementById("filter-model");
+    runtimes.forEach(r => { const o = document.createElement("option"); o.value = r; o.textContent = r; rSel.appendChild(o); });
+    models.forEach(m   => { const o = document.createElement("option"); o.value = m; o.textContent = m; mSel.appendChild(o); });
+    rSel.addEventListener("change", render);
+    mSel.addEventListener("change", render);
+  }
+
+  function filtered() {
+    const rt = document.getElementById("filter-runtime").value;
+    const mo = document.getElementById("filter-model").value;
+    return allResults.filter(r =>
+      (!rt || r.config.runtime === rt) &&
+      (!mo || r.config.model.name === mo)
+    );
+  }
+
+  function label(r) {
+    return `${r.config.runtime}/${r.config.model.name}`;
+  }
+
+  function render() {
+    const data = filtered();
+    renderTable(data);
+    renderCharts(data);
+    const dev = data[0]?.device || allResults[0]?.device || "";
+    document.getElementById("device-label").textContent = dev;
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById("results-body");
+    tbody.innerHTML = "";
+    [...data].reverse().forEach(r => {
+      const p = r.performance, s = r.system, a = s.apple;
+      const ts = new Date(r.timestamp).toLocaleString();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${ts}</td>
+        <td><span class="badge ${r.config.runtime}">${r.config.runtime}</span></td>
+        <td>${r.config.model.name}</td>
+        <td class="tps-cell">${p.tokens_per_second.toFixed(1)}</td>
+        <td>${p.total_tokens}</td>
+        <td>${p.total_duration_s.toFixed(2)} s</td>
+        <td>${p.time_to_first_token_ms != null ? p.time_to_first_token_ms.toFixed(0) + " ms" : "—"}</td>
+        <td>${s.ram_used_gb_peak.toFixed(2)} GB</td>
+        <td>${s.cpu_percent_mean.toFixed(1)} %</td>
+        <td>${a.package_power_mw != null ? a.package_power_mw.toFixed(0) : "—"}</td>
+        <td>${a.cpu_die_temp_celsius != null ? a.cpu_die_temp_celsius.toFixed(1) + " °C" : "—"}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderCharts(data) {
+    const labels  = data.map(label);
+    const colors  = data.map((_, i) => PALETTE[i % PALETTE.length]);
+
+    const specs = [
+      { id: "chart-tps",   values: data.map(r => r.performance.tokens_per_second), label: "tok/s" },
+      { id: "chart-ram",   values: data.map(r => r.system.ram_used_gb_peak),        label: "GB"    },
+      { id: "chart-power", values: data.map(r => r.system.apple.package_power_mw),  label: "mW"    },
+      { id: "chart-ttft",  values: data.map(r => r.performance.time_to_first_token_ms), label: "ms" },
+    ];
+
+    specs.forEach(({ id, values, label }) => {
+      if (charts[id]) { charts[id].destroy(); }
+      const ctx = document.getElementById(id).getContext("2d");
+      charts[id] = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderRadius: 5,
+            borderSkipped: false,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              ticks: { color: "#6b7280", font: { size: 11 }, maxRotation: 35 },
+              grid: { color: "#1f2533" },
+            },
+            y: {
+              ticks: { color: "#6b7280", font: { size: 11 } },
+              grid: { color: "#1f2533" },
+              title: { display: true, text: label, color: "#6b7280", font: { size: 11 } },
+            },
+          },
+        },
+      });
+    });
+  }
+
+  loadResults();
+</script>
+</body>
+</html>
