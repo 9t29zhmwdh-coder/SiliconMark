@@ -1,4 +1,8 @@
-# SiliconMark
+<div align="center">
+  <img src="RayStudio.png" alt="RayStudio Logo" width="120"/>
+
+  <h1>SiliconMark</h1>
+</div>
 
 **Apple Silicon LLM Benchmark Suite**
 
@@ -255,5 +259,10 @@ pytest tests/
 MIT © RayStudio
 
 ---
+
+<div align="right">
+  <sub>by</sub><br/>
+  <img src="RayStudio.png" alt="RayStudio" width="70"/>
+</div>
 
 **Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) &nbsp;·&nbsp; **Status:** Active &nbsp;·&nbsp; **Last Updated:** Juni 2026
