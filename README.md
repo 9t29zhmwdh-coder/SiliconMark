@@ -254,10 +254,6 @@ pytest tests/
 
 ---
 
-## License
-
-MIT © RayStudio
-
 ---
 
 **Author:** [Rafael Yilmaz](https://github.com/9t29zhmwdh-coder) &nbsp;·&nbsp; **Status:** Active &nbsp;·&nbsp; **Last Updated:** Juni 2026
