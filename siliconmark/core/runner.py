@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import concurrent.futures
 import platform
 import subprocess
 
@@ -61,37 +62,58 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
 
         if config.warmup:
             progress.update(task, description=f"Warming up {config.runtime}…")
-            runtime.prepare()
+        runtime.prepare()
 
-        collector = MetricsCollector(interval_s=0.5)
-        collector.start()
+        best_inference = None
+        best_sys = None
+        best_apple_snap = None
 
-        progress.update(
-            task,
-            description=f"Generating {config.max_tokens} tokens via {config.runtime}…",
-        )
-        inference = runtime.infer(config.prompt, config.max_tokens)
+        for run_idx in range(config.num_runs):
+            collector = MetricsCollector(interval_s=0.5)
+            collector.start()
 
-        sys_result = collector.stop()
+            progress.update(
+                task,
+                description=(
+                    f"Run {run_idx + 1}/{config.num_runs} — "
+                    f"{config.max_tokens} tokens via {config.runtime}…"
+                ),
+            )
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                apple_future = pool.submit(sample_powermetrics, 500)
+                inference = runtime.infer(config.prompt, config.max_tokens)
+                apple_snap = apple_future.result()
+
+            sys_result = collector.stop()
+
+            tps = inference.tokens_generated / max(inference.total_duration_s, 1e-9)
+            best_tps = (
+                best_inference.tokens_generated / max(best_inference.total_duration_s, 1e-9)
+                if best_inference else -1.0
+            )
+            if tps > best_tps:
+                best_inference = inference
+                best_sys = sys_result
+                best_apple_snap = apple_snap
+
         runtime.cleanup()
-
-    apple_snap = sample_powermetrics(duration_ms=500)
 
     return BenchmarkResult(
         device=device,
         config=config,
-        performance=runtime.to_performance_metrics(inference),
+        performance=runtime.to_performance_metrics(best_inference),
         system=SystemMetrics(
-            ram_used_gb_mean=sys_result.ram_used_gb_mean,
-            ram_used_gb_peak=sys_result.ram_used_gb_peak,
-            ram_percent_mean=sys_result.ram_percent_mean,
-            cpu_percent_mean=sys_result.cpu_percent_mean,
+            ram_used_gb_mean=best_sys.ram_used_gb_mean,
+            ram_used_gb_peak=best_sys.ram_used_gb_peak,
+            ram_percent_mean=best_sys.ram_percent_mean,
+            cpu_percent_mean=best_sys.cpu_percent_mean,
             apple=AppleMetrics(
-                cpu_power_mw=apple_snap.cpu_power_mw,
-                gpu_power_mw=apple_snap.gpu_power_mw,
-                ane_power_mw=apple_snap.ane_power_mw,
-                package_power_mw=apple_snap.package_power_mw,
-                cpu_die_temp_celsius=apple_snap.cpu_die_temp_celsius,
+                cpu_power_mw=best_apple_snap.cpu_power_mw,
+                gpu_power_mw=best_apple_snap.gpu_power_mw,
+                ane_power_mw=best_apple_snap.ane_power_mw,
+                package_power_mw=best_apple_snap.package_power_mw,
+                cpu_die_temp_celsius=best_apple_snap.cpu_die_temp_celsius,
             ),
         ),
     )
