@@ -12,6 +12,7 @@ Measure real-world inference performance of local LLM runtimes on Apple Silicon 
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1--M4-lightgrey?logo=apple)
 ![Platform](https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![CI](https://github.com/9t29zhmwdh-coder/SiliconMark/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/SiliconMark/actions/workflows/ci.yml)
 
 
 ---
