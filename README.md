@@ -8,8 +8,8 @@
 
 Measure real-world inference performance of local LLM runtimes on Apple Silicon — Token/s, RAM usage, power draw, ANE activity and temperature, all from one CLI.
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
-![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1--M4-black?logo=apple)
+![Python](https://img.shields.io/badge/Python-3.11+-orange?logo=python)
+![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1--M4-lightgrey?logo=apple)
 ![Platform](https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
