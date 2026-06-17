@@ -6,7 +6,7 @@
 
 **Apple Silicon LLM Benchmark Suite**
 
-Measure real-world inference performance of local LLM runtimes on Apple Silicon — Token/s, RAM usage, power draw, ANE activity and temperature, all from one CLI.
+Measure real-world inference performance of local LLM runtimes on Apple Silicon: Token/s, RAM usage, power draw, ANE activity and temperature, all from one CLI.
 
 ![Python](https://img.shields.io/badge/Python-3.11+-orange?logo=python)
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1--M4-lightgrey?logo=apple)
@@ -24,8 +24,8 @@ Measure real-world inference performance of local LLM runtimes on Apple Silicon 
 | **Runtimes** | Ollama · llama.cpp server · MLC-LLM · Direct GGUF (llama-cpp-python) |
 | **Metrics** | Token/s · Time-to-first-token · RAM (mean & peak) · CPU usage |
 | **Apple-specific** | Package / CPU / GPU / ANE power (mW) · CPU die temperature |
-| **Export** | Structured JSON — one file per run |
-| **Dashboard** | Web UI with Chart.js charts — `siliconmark dashboard` |
+| **Export** | Structured JSON: one file per run |
+| **Dashboard** | Web UI with Chart.js charts: `siliconmark dashboard` |
 | **Extensible** | Add a new runtime in ~40 lines by subclassing `BaseRuntime` |
 
 > **Power metrics** require `sudo powermetrics` without a password prompt.  
@@ -90,7 +90,7 @@ Commands:
 |--------|---------|-------------|
 | `--runtime` / `-r` | *(required)* | `ollama` · `llamacpp` · `mlc` · `gguf` |
 | `--model` / `-m` | *(required)* | Model name (e.g. `llama3.2:3b`) |
-| `--model-path` / `-p` | — | Path to `.gguf` file (gguf runtime only) |
+| `--model-path` / `-p` |; | Path to `.gguf` file (gguf runtime only) |
 | `--tokens` / `-t` | `200` | Number of tokens to generate |
 | `--prompt` | *(default)* | Custom benchmark prompt |
 | `--output` / `-o` | `./results` | Directory to save JSON results |
