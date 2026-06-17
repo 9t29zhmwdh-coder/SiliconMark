@@ -5,9 +5,9 @@
 
 [🇬🇧 English Version](README.md)
 
-**Apple Silicon LLM Benchmark Suite — Token/s, RAM, Leistung, ANE · Ollama · llama.cpp · MLC · GGUF**
+**Apple Silicon LLM Benchmark Suite: Token/s, RAM, Leistung, ANE · Ollama · llama.cpp · MLC · GGUF**
 
-SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silicon — Token/s, RAM-Verbrauch, Energiebedarf, ANE-Aktivität und Temperatur, alles über ein einziges CLI.
+SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silicon:brauch, Energiebedarf, ANE-Aktivität und Temperatur, alles über ein einziges CLI.
 
 ---
 
@@ -18,7 +18,7 @@ SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silico
 | **Runtimes** | Ollama · llama.cpp Server · MLC-LLM · Direktes GGUF (llama-cpp-python) |
 | **Metriken** | Token/s · Zeit bis zum ersten Token · RAM (Mittelwert & Peak) · CPU-Auslastung |
 | **Apple-spezifisch** | Package / CPU / GPU / ANE-Leistung (mW) · CPU-Die-Temperatur |
-| **Export** | Strukturiertes JSON — eine Datei pro Benchmark-Lauf |
+| **Export** | Strukturiertes JSON: eine Datei pro Benchmark-Lauf |
 | **Dashboard** | Web-UI mit Chart.js · `siliconmark dashboard` |
 | **Erweiterbar** | Neue Runtime in ~40 Zeilen via `BaseRuntime`-Subklasse |
 
