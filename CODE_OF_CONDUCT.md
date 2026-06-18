@@ -1,13 +1,13 @@
 # Code of Conduct
 
-## Our Pledge
+## Pledge
 
-We as contributors and maintainers pledge to make participation in our project
+I as the maintainer pledge to make participation in this project
 a harassment-free experience for everyone, regardless of age, body size,
 disability, ethnicity, gender identity and expression, level of experience,
 nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-## Our Standards
+## Standards
 
 Positive behavior includes welcoming language, respect for differing viewpoints,
 graceful acceptance of constructive criticism. Unacceptable behavior includes
