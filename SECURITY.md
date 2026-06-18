@@ -18,7 +18,7 @@ Include:
 - Potential impact
 - Suggested fix (if available)
 
-We aim to respond within 72 hours and will keep you informed throughout the process.
+I aim to respond within 72 hours and will keep you informed throughout the process.
 
 ## Scope
 
