@@ -1,11 +1,11 @@
-# Privacy Policy — SiliconMark
+# Privacy Policy : SiliconMark
 
 SiliconMark runs **fully locally** on your Apple Silicon machine.
 
 ## What data is processed
 
-- LLM inference prompts and responses — used only for benchmark measurements, not stored permanently
-- System metrics: CPU/GPU/ANE usage, RAM, power draw, temperature — read via psutil and Apple powermetrics
+- LLM inference prompts and responses : used only for benchmark measurements, not stored permanently
+- System metrics: CPU/GPU/ANE usage, RAM, power draw, temperature : read via psutil and Apple powermetrics
 
 ## What data leaves your machine
 
