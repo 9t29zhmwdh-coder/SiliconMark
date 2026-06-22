@@ -16,24 +16,57 @@ class ApplePowerSnapshot:
     cpu_die_temp_celsius: float | None = None
 
 
+class PowermetricsSession:
+    """
+    Long-running powermetrics process that spans the full inference duration.
+    Start before inference, stop after — averages all collected samples.
+    Requires passwordless sudo for powermetrics. Returns empty snapshot if unavailable.
+    """
+
+    def __init__(self, sample_interval_ms: int = 200) -> None:
+        self._interval = sample_interval_ms
+        self._proc: subprocess.Popen | None = None  # type: ignore[type-arg]
+
+    def start(self) -> None:
+        try:
+            self._proc = subprocess.Popen(
+                [
+                    "sudo", "-n", "powermetrics",
+                    "--samplers", "cpu_power,gpu_power,thermal",
+                    "-i", str(self._interval),
+                    "-n", "9999",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            )
+        except (FileNotFoundError, PermissionError):
+            self._proc = None
+
+    def stop(self) -> ApplePowerSnapshot:
+        if self._proc is None:
+            return ApplePowerSnapshot()
+        self._proc.terminate()
+        try:
+            out, _ = self._proc.communicate(timeout=3)
+        except subprocess.TimeoutExpired:
+            self._proc.kill()
+            out, _ = self._proc.communicate()
+        return _parse_averaged(out)
+
+
 def sample_powermetrics(duration_ms: int = 1000) -> ApplePowerSnapshot:
     """
     Spawn powermetrics for one sample and parse the result.
-    Requires `sudo powermetrics` without a password prompt (NOPASSWD in sudoers).
-    Returns an empty snapshot if unavailable — callers must treat None as "not measured".
+    Requires passwordless sudo. Returns empty snapshot if unavailable.
     """
     try:
         result = subprocess.run(
             [
-                "sudo",
-                "-n",
-                "powermetrics",
-                "--samplers",
-                "cpu_power,gpu_power,thermal",
-                "-i",
-                str(duration_ms),
-                "-n",
-                "1",
+                "sudo", "-n", "powermetrics",
+                "--samplers", "cpu_power,gpu_power,thermal",
+                "-i", str(duration_ms),
+                "-n", "1",
             ],
             capture_output=True,
             text=True,
@@ -41,36 +74,35 @@ def sample_powermetrics(duration_ms: int = 1000) -> ApplePowerSnapshot:
         )
         if result.returncode != 0:
             return ApplePowerSnapshot()
-        return _parse(result.stdout)
+        return _parse_averaged(result.stdout)
     except (subprocess.TimeoutExpired, FileNotFoundError, PermissionError):
         return ApplePowerSnapshot()
 
 
-def _parse(raw: str) -> ApplePowerSnapshot:
-    snap = ApplePowerSnapshot()
+def _parse_averaged(raw: str) -> ApplePowerSnapshot:
+    """Parse one or more powermetrics sample blocks and return averaged values."""
 
-    m = re.search(r"^CPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    if m:
-        snap.cpu_power_mw = float(m.group(1))
+    def _avg(vals: list[float]) -> float | None:
+        return sum(vals) / len(vals) if vals else None
 
-    m = re.search(r"^GPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    if m:
-        snap.gpu_power_mw = float(m.group(1))
+    cpu_vals = [float(m) for m in re.findall(r"^CPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    gpu_vals = [float(m) for m in re.findall(r"^GPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    ane_vals = [float(m) for m in re.findall(r"^ANE Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    pkg_vals = [float(m) for m in re.findall(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    temp_vals = [float(m) for m in re.findall(r"CPU die temperature:\s+([\d.]+)\s+C", raw, re.MULTILINE | re.IGNORECASE)]
 
-    m = re.search(r"^ANE Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    if m:
-        snap.ane_power_mw = float(m.group(1))
+    cpu_avg = _avg(cpu_vals)
+    gpu_avg = _avg(gpu_vals)
+    ane_avg = _avg(ane_vals)
+    pkg_avg = _avg(pkg_vals)
 
-    m = re.search(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    if m:
-        snap.package_power_mw = float(m.group(1))
-    else:
-        parts = [snap.cpu_power_mw, snap.gpu_power_mw, snap.ane_power_mw]
-        if any(p is not None for p in parts):
-            snap.package_power_mw = sum(p for p in parts if p is not None)
+    if pkg_avg is None and any(v is not None for v in [cpu_avg, gpu_avg, ane_avg]):
+        pkg_avg = sum(v for v in [cpu_avg, gpu_avg, ane_avg] if v is not None)
 
-    m = re.search(r"CPU die temperature:\s+([\d.]+)\s+C", raw, re.MULTILINE | re.IGNORECASE)
-    if m:
-        snap.cpu_die_temp_celsius = float(m.group(1))
-
-    return snap
+    return ApplePowerSnapshot(
+        cpu_power_mw=cpu_avg,
+        gpu_power_mw=gpu_avg,
+        ane_power_mw=ane_avg,
+        package_power_mw=pkg_avg,
+        cpu_die_temp_celsius=_avg(temp_vals),
+    )
