@@ -8,10 +8,11 @@ This file documents the repository structure and CI expectations for contributor
 SiliconMark/
 ├── siliconmark/
 │   ├── cli.py
+│   ├── core/
 │   ├── runtimes/
 │   ├── metrics/
-│   ├── benchmark.py
-│   └── output.py
+│   ├── exporters/
+│   └── dashboard/
 ├── tests/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/

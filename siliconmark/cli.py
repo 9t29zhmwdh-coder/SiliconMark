@@ -31,15 +31,21 @@ _DEFAULT_PROMPT = (
 @app.command()
 def run(
     runtime: str = typer.Option(
-        ..., "--runtime", "-r",
+        ...,
+        "--runtime",
+        "-r",
         help="Runtime adapter: ollama | llamacpp | mlc | gguf",
     ),
     model: str = typer.Option(
-        ..., "--model", "-m",
+        ...,
+        "--model",
+        "-m",
         help="Model name (e.g. llama3.2:3b for Ollama, or filename for GGUF)",
     ),
     model_path: str = typer.Option(
-        None, "--model-path", "-p",
+        None,
+        "--model-path",
+        "-p",
         help="Absolute path to .gguf file (required for gguf runtime)",
     ),
     max_tokens: int = typer.Option(200, "--tokens", "-t", help="Tokens to generate"),
@@ -109,6 +115,7 @@ def dashboard(
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
+
 def _print_result(result) -> None:
     p = result.performance
     s = result.system
@@ -123,28 +130,28 @@ def _print_result(result) -> None:
     table.add_column("Metric", style="bold dim")
     table.add_column("Value")
 
-    table.add_row("Device",              result.device)
-    table.add_row("Tokens / s",          f"[bold green]{p.tokens_per_second:.1f}[/]")
-    table.add_row("Tokens generated",    str(p.total_tokens))
-    table.add_row("Duration",            f"{p.total_duration_s:.2f} s")
+    table.add_row("Device", result.device)
+    table.add_row("Tokens / s", f"[bold green]{p.tokens_per_second:.1f}[/]")
+    table.add_row("Tokens generated", str(p.total_tokens))
+    table.add_row("Duration", f"{p.total_duration_s:.2f} s")
     if p.time_to_first_token_ms:
         table.add_row("Time to first token", f"{p.time_to_first_token_ms:.0f} ms")
     if p.prompt_tokens:
-        table.add_row("Prompt tokens",   str(p.prompt_tokens))
-    table.add_row("RAM mean",            f"{s.ram_used_gb_mean:.2f} GB")
-    table.add_row("RAM peak",            f"{s.ram_used_gb_peak:.2f} GB")
-    table.add_row("CPU usage",           f"{s.cpu_percent_mean:.1f} %")
+        table.add_row("Prompt tokens", str(p.prompt_tokens))
+    table.add_row("RAM mean", f"{s.ram_used_gb_mean:.2f} GB")
+    table.add_row("RAM peak", f"{s.ram_used_gb_peak:.2f} GB")
+    table.add_row("CPU usage", f"{s.cpu_percent_mean:.1f} %")
 
     if a.package_power_mw is not None:
-        table.add_row("Package power",   f"{a.package_power_mw:.0f} mW")
+        table.add_row("Package power", f"{a.package_power_mw:.0f} mW")
     if a.cpu_power_mw is not None:
-        table.add_row("CPU power",       f"{a.cpu_power_mw:.0f} mW")
+        table.add_row("CPU power", f"{a.cpu_power_mw:.0f} mW")
     if a.gpu_power_mw is not None:
-        table.add_row("GPU power",       f"{a.gpu_power_mw:.0f} mW")
+        table.add_row("GPU power", f"{a.gpu_power_mw:.0f} mW")
     if a.ane_power_mw is not None:
-        table.add_row("ANE power",       f"{a.ane_power_mw:.0f} mW")
+        table.add_row("ANE power", f"{a.ane_power_mw:.0f} mW")
     if a.cpu_die_temp_celsius is not None:
-        table.add_row("CPU temp",        f"{a.cpu_die_temp_celsius:.1f} °C")
+        table.add_row("CPU temp", f"{a.cpu_die_temp_celsius:.1f} °C")
 
     console.print()
     console.print(table)

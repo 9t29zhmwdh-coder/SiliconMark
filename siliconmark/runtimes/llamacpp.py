@@ -37,7 +37,8 @@ class LlamaCppRuntime(BaseRuntime):
         timings: dict = {}
 
         with self._client.stream(
-            "POST", "/completion",
+            "POST",
+            "/completion",
             json={"prompt": prompt, "n_predict": max_tokens, "stream": True},
         ) as resp:
             resp.raise_for_status()

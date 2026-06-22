@@ -26,7 +26,9 @@ def get_device_name() -> str:
     try:
         out = subprocess.run(
             ["sysctl", "-n", "machdep.cpu.brand_string"],
-            capture_output=True, text=True, timeout=5,
+            capture_output=True,
+            text=True,
+            timeout=5,
         ).stdout.strip()
         if out:
             ram = _total_ram_gb()
@@ -39,7 +41,8 @@ def get_device_name() -> str:
 def _total_ram_gb() -> int | None:
     try:
         import psutil
-        return round(psutil.virtual_memory().total / 1024 ** 3)
+
+        return round(psutil.virtual_memory().total / 1024**3)
     except Exception:
         return None
 
@@ -56,9 +59,7 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
         console=console,
         transient=True,
     ) as progress:
-        task = progress.add_task(
-            f"Loading {config.runtime} / {config.model.name}…", total=None
-        )
+        task = progress.add_task(f"Loading {config.runtime} / {config.model.name}…", total=None)
 
         if config.warmup:
             progress.update(task, description=f"Warming up {config.runtime}…")
@@ -90,7 +91,8 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
             tps = inference.tokens_generated / max(inference.total_duration_s, 1e-9)
             best_tps = (
                 best_inference.tokens_generated / max(best_inference.total_duration_s, 1e-9)
-                if best_inference else -1.0
+                if best_inference
+                else -1.0
             )
             if tps > best_tps:
                 best_inference = inference

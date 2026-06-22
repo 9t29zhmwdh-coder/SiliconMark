@@ -18,11 +18,10 @@ class MLCRuntime(BaseRuntime):
     def prepare(self) -> None:
         try:
             from mlc_llm import MLCEngine  # type: ignore[import-not-found]
+
             self._engine = MLCEngine(self.model.name)
         except ImportError as e:
-            raise RuntimeError(
-                "MLC-LLM not installed. Install with: pip install mlc-llm"
-            ) from e
+            raise RuntimeError("MLC-LLM not installed. Install with: pip install mlc-llm") from e
 
     def infer(self, prompt: str, max_tokens: int) -> InferenceResult:
         if self._engine is None:

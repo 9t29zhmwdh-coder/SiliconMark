@@ -66,10 +66,12 @@ class MetricsCollector:
     def _run(self) -> None:
         while not self._stop_event.is_set():
             vm = psutil.virtual_memory()
-            self._result.samples.append(MetricsSample(
-                timestamp=time.time(),
-                ram_used_gb=round(vm.used / 1024 ** 3, 3),
-                ram_percent=vm.percent,
-                cpu_percent=psutil.cpu_percent(interval=None),
-            ))
+            self._result.samples.append(
+                MetricsSample(
+                    timestamp=time.time(),
+                    ram_used_gb=round(vm.used / 1024**3, 3),
+                    ram_percent=vm.percent,
+                    cpu_percent=psutil.cpu_percent(interval=None),
+                )
+            )
             time.sleep(self._interval)

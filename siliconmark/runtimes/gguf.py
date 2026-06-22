@@ -20,6 +20,7 @@ class GGUFRuntime(BaseRuntime):
     def prepare(self) -> None:
         try:
             from llama_cpp import Llama  # type: ignore[import-not-found]
+
             self._llm = Llama(
                 model_path=self.model.path,
                 n_ctx=self.model.context_length or 2048,
@@ -28,8 +29,7 @@ class GGUFRuntime(BaseRuntime):
             )
         except ImportError as e:
             raise RuntimeError(
-                "llama-cpp-python not installed. "
-                "Install with: pip install 'siliconmark[gguf]'"
+                "llama-cpp-python not installed. Install with: pip install 'siliconmark[gguf]'"
             ) from e
 
     def infer(self, prompt: str, max_tokens: int) -> InferenceResult:

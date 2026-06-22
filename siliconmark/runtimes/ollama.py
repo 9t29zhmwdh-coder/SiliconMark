@@ -24,13 +24,15 @@ class OllamaRuntime(BaseRuntime):
         try:
             self._client.post(
                 "/api/generate",
-                json={"model": self.model.name, "prompt": "hi", "stream": False,
-                      "options": {"num_predict": 1}},
+                json={
+                    "model": self.model.name,
+                    "prompt": "hi",
+                    "stream": False,
+                    "options": {"num_predict": 1},
+                },
             )
         except httpx.ConnectError as e:
-            raise RuntimeError(
-                "Ollama is not running. Start it with: ollama serve"
-            ) from e
+            raise RuntimeError("Ollama is not running. Start it with: ollama serve") from e
 
     def infer(self, prompt: str, max_tokens: int) -> InferenceResult:
         first_token_time: float | None = None
@@ -41,7 +43,8 @@ class OllamaRuntime(BaseRuntime):
         chunks: list[str] = []
 
         with self._client.stream(
-            "POST", "/api/generate",
+            "POST",
+            "/api/generate",
             json={
                 "model": self.model.name,
                 "prompt": prompt,

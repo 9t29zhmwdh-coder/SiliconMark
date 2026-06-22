@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+import re
 import subprocess
 from dataclasses import dataclass
 
@@ -25,11 +25,15 @@ def sample_powermetrics(duration_ms: int = 1000) -> ApplePowerSnapshot:
     try:
         result = subprocess.run(
             [
-                "sudo", "-n", "powermetrics",
-                "--samplers", "cpu_power,gpu_power,thermal",
-                "--format", "json",
-                "-i", str(duration_ms),
-                "-n", "1",
+                "sudo",
+                "-n",
+                "powermetrics",
+                "--samplers",
+                "cpu_power,gpu_power,thermal",
+                "-i",
+                str(duration_ms),
+                "-n",
+                "1",
             ],
             capture_output=True,
             text=True,
@@ -43,44 +47,30 @@ def sample_powermetrics(duration_ms: int = 1000) -> ApplePowerSnapshot:
 
 
 def _parse(raw: str) -> ApplePowerSnapshot:
-    decoder = json.JSONDecoder()
-    pos, last_obj = 0, None
-    while pos < len(raw):
-        try:
-            obj, end = decoder.raw_decode(raw, pos)
-            last_obj = obj
-            pos = end
-            while pos < len(raw) and raw[pos] in " \t\n\r":
-                pos += 1
-        except json.JSONDecodeError:
-            pos += 1
-
-    if last_obj is None:
-        return ApplePowerSnapshot()
-
     snap = ApplePowerSnapshot()
-    proc = last_obj.get("processor", {})
-    snap.cpu_power_mw = _f(proc, "cpu_mw")
-    snap.gpu_power_mw = _f(proc, "gpu_mw")
-    snap.ane_power_mw = _f(proc, "ane_mw")
-    snap.package_power_mw = _f(proc, "package_mw")
 
-    # Fallback: sum individual components if package not reported
-    if snap.package_power_mw is None:
+    m = re.search(r"^CPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
+    if m:
+        snap.cpu_power_mw = float(m.group(1))
+
+    m = re.search(r"^GPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
+    if m:
+        snap.gpu_power_mw = float(m.group(1))
+
+    m = re.search(r"^ANE Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
+    if m:
+        snap.ane_power_mw = float(m.group(1))
+
+    m = re.search(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
+    if m:
+        snap.package_power_mw = float(m.group(1))
+    else:
         parts = [snap.cpu_power_mw, snap.gpu_power_mw, snap.ane_power_mw]
         if any(p is not None for p in parts):
             snap.package_power_mw = sum(p for p in parts if p is not None)
 
-    thermal = last_obj.get("thermal", {})
-    if isinstance(thermal, dict):
-        snap.cpu_die_temp_celsius = _f(thermal, "cpu_die_temperature")
+    m = re.search(r"CPU die temperature:\s+([\d.]+)\s+C", raw, re.MULTILINE | re.IGNORECASE)
+    if m:
+        snap.cpu_die_temp_celsius = float(m.group(1))
 
     return snap
-
-
-def _f(d: dict, key: str) -> float | None:
-    val = d.get(key)
-    try:
-        return float(val) if val is not None else None
-    except (TypeError, ValueError):
-        return None

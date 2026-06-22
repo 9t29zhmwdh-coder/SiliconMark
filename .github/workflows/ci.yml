@@ -8,14 +8,18 @@ on:
 
 jobs:
   check:
-    name: Lint & Check
+    name: Lint, Format & Test
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install ruff
-        run: pip install ruff
+      - name: Install package and dev deps
+        run: pip install -e ".[dev]"
       - name: Lint
-        run: ruff check --select E9,F821,F822,F823 --output-format=github .
+        run: ruff check --output-format=github .
+      - name: Format check
+        run: ruff format --check .
+      - name: Test
+        run: pytest tests/ -v
