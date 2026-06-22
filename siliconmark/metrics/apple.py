@@ -95,18 +95,11 @@ def _parse_averaged(raw: str) -> ApplePowerSnapshot:
     def _avg(vals: list[float]) -> float | None:
         return sum(vals) / len(vals) if vals else None
 
-    cpu_vals = [
-        float(m) for m in re.findall(r"^CPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    ]
-    gpu_vals = [
-        float(m) for m in re.findall(r"^GPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    ]
-    ane_vals = [
-        float(m) for m in re.findall(r"^ANE Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
-    ]
+    cpu_vals = [float(m) for m in re.findall(r"^CPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    gpu_vals = [float(m) for m in re.findall(r"^GPU Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
+    ane_vals = [float(m) for m in re.findall(r"^ANE Power:\s+([\d.]+)\s+mW", raw, re.MULTILINE)]
     pkg_vals = [
-        float(m)
-        for m in re.findall(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
+        float(m) for m in re.findall(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
     ]
     temp_vals = [
         float(m)
