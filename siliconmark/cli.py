@@ -50,7 +50,12 @@ def run(
     ),
     max_tokens: int = typer.Option(200, "--tokens", "-t", help="Tokens to generate"),
     prompt: str = typer.Option(_DEFAULT_PROMPT, "--prompt", help="Benchmark prompt text"),
-    output_dir: Path = typer.Option(Path("results"), "--output", "-o", help="Results directory"),
+    output_dir: Path = typer.Option(
+        Path.home() / ".siliconmark" / "results",
+        "--output",
+        "-o",
+        help="Results directory",
+    ),
     no_warmup: bool = typer.Option(False, "--no-warmup", help="Skip warmup inference"),
 ):
     """Run a benchmark for a single runtime/model combination."""
@@ -95,7 +100,12 @@ def device():
 
 @app.command()
 def dashboard(
-    results_dir: Path = typer.Option(Path("results"), "--results", "-r", help="Results directory"),
+    results_dir: Path = typer.Option(
+        Path.home() / ".siliconmark" / "results",
+        "--results",
+        "-r",
+        help="Results directory",
+    ),
     host: str = typer.Option("127.0.0.1", "--host"),
     port: int = typer.Option(8080, "--port", "-p"),
 ):
