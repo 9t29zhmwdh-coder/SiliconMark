@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import concurrent.futures
 import platform
 import subprocess
 
@@ -16,7 +15,7 @@ from siliconmark.core.models import (
     SystemMetrics,
 )
 from siliconmark.core.registry import get_runtime
-from siliconmark.metrics.apple import sample_powermetrics
+from siliconmark.metrics.apple import PowermetricsSession
 from siliconmark.metrics.collector import MetricsCollector
 
 console = Console()
@@ -81,10 +80,12 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
                 ),
             )
 
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                apple_future = pool.submit(sample_powermetrics, 500)
-                inference = runtime.infer(config.prompt, config.max_tokens)
-                apple_snap = apple_future.result()
+            # Start power sampling before inference and stop after — captures the full
+            # inference window regardless of duration, then averages all collected samples.
+            apple_session = PowermetricsSession(sample_interval_ms=200)
+            apple_session.start()
+            inference = runtime.infer(config.prompt, config.max_tokens)
+            apple_snap = apple_session.stop()
 
             sys_result = collector.stop()
 
