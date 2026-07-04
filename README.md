@@ -215,7 +215,7 @@ class MyRuntime(BaseRuntime):
 ```
 
 ```python
-# siliconmark/core/registry.py  — add one line:
+# siliconmark/core/registry.py  add one line:
 "myruntime": "siliconmark.runtimes.myruntime:MyRuntime",
 ```
 
