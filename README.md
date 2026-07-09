@@ -13,6 +13,10 @@ Measure real-world inference performance of local LLM runtimes on Apple Silicon:
 
 ---
 
+> 🌱 New here? → [Step-by-step guide for beginners](GETTING_STARTED.md)
+
+---
+
 ## Features
 
 | | |
