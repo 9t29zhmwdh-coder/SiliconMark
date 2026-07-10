@@ -13,6 +13,10 @@ SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silico
 
 ---
 
+> 🌱 Neu hier? → [Schritt-für-Schritt-Anleitung für Einsteiger](GETTING_STARTED.md)
+
+---
+
 ## Funktionen
 
 | Funktion | Beschreibung |
