@@ -1,11 +1,17 @@
-# Changelog — SiliconMark
+# Changelog: SiliconMark
 
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [0.1.1] — 2026-07-10
+## [0.1.2] - 2026-07-10
+
+### Fixed
+
+- Removed em-dashes from CHANGELOG.md, replaced with colons/plain hyphens
+
+## [0.1.1] - 2026-07-10
 
 ### Fixed
 
@@ -15,7 +21,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Added the "New here?" beginner guide callout to README.de.md (was missing)
 
-## [0.1.0] — 2026-06-15
+## [0.1.0] - 2026-06-15
 
 ### Added
 - OllamaRuntime: benchmark models via Ollama HTTP API
