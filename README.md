@@ -4,6 +4,8 @@
   <h1>SiliconMark</h1>
 </div>
 
+[🇩🇪 Deutsche Version](README.de.md)
+
 **Apple Silicon LLM Benchmark Suite**
 
 Measure real-world inference performance of local LLM runtimes on Apple Silicon: Token/s, RAM usage, power draw, ANE activity and temperature, all from one CLI.
