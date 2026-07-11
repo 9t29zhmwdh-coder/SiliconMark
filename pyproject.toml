@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "siliconmark"
-version = "0.1.4"
-description = "Apple Silicon LLM Benchmark Suite — Ollama, llama.cpp, MLC, GGUF"
+version = "0.1.5"
+description = "Apple Silicon LLM Benchmark Suite: Ollama, llama.cpp, MLC, GGUF"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
