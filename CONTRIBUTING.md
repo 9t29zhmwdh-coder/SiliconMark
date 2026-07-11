@@ -45,8 +45,8 @@ Both must pass before opening a pull request.
 
 ## Branch Strategy
 
-- `main` — stable, tagged releases
-- `dev` — integration branch
+- `main`: stable, tagged releases
+- `dev`: integration branch
 - Feature branches: `feat/<name>`
 
 ## Adding a Runtime

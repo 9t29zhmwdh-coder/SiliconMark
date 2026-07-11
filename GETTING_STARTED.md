@@ -2,7 +2,7 @@
 
 This guide is for people with **no coding experience**. It walks you through every step needed to run SiliconMark, from opening a terminal to seeing your first benchmark result.
 
-> **Important:** SiliconMark only runs on **macOS with Apple Silicon** (M1/M2/M3/M4), because it reads Apple-specific hardware sensors (power draw, Neural Engine activity, CPU temperature). If you're on Windows or Linux, you cannot run SiliconMark directly on that machine — see the note at the end of this guide.
+> **Important:** SiliconMark only runs on **macOS with Apple Silicon** (M1/M2/M3/M4), because it reads Apple-specific hardware sensors (power draw, Neural Engine activity, CPU temperature). If you're on Windows or Linux, you cannot run SiliconMark directly on that machine: see the note at the end of this guide.
 
 ---
 
@@ -53,7 +53,7 @@ No-Git route:
 cd ~/Documents/SiliconMark-main
 ```
 
-(Adjust the folder name to whatever it was extracted as — GitHub ZIP downloads are usually named `<repo>-main`.)
+(Adjust the folder name to whatever it was extracted as: GitHub ZIP downloads are usually named `<repo>-main`.)
 
 Or, with Git:
 
@@ -78,7 +78,7 @@ pip install -e ".[gguf]"
 
 ### 5. Install a runtime to benchmark
 
-SiliconMark measures performance of an LLM runtime you already have installed — it doesn't include one itself. The simplest option is [Ollama](https://ollama.com):
+SiliconMark measures performance of an LLM runtime you already have installed: it doesn't include one itself. The simplest option is [Ollama](https://ollama.com):
 
 ```bash
 brew install ollama
@@ -113,13 +113,13 @@ Then open the URL it prints (typically `http://127.0.0.1:8080`) in your browser.
 
 Running `siliconmark run --runtime ollama --model llama3.2:3b` prints live progress in the terminal, then a summary with tokens/second, time-to-first-token, and RAM usage. A JSON file with the full results is saved into `./results/`.
 
-Apple-specific fields (power draw, CPU temperature) will show as `null` unless you've enabled passwordless `sudo` for `powermetrics` — see the "Enabling Power Metrics" section in the main [README.md](README.md) if you want those numbers too. This step is optional; SiliconMark works fine without it.
+Apple-specific fields (power draw, CPU temperature) will show as `null` unless you've enabled passwordless `sudo` for `powermetrics`: see the "Enabling Power Metrics" section in the main [README.md](README.md) if you want those numbers too. This step is optional; SiliconMark works fine without it.
 
 ---
 
 ## A note for Windows and Linux users
 
-If you don't have access to a Mac but want to explore what SiliconMark produces, ask the repository owner for a sample JSON result, or read the "JSON Result Schema" and "Features" sections in the main [README.md](README.md) — they show exactly what a benchmark run captures.
+If you don't have access to a Mac but want to explore what SiliconMark produces, ask the repository owner for a sample JSON result, or read the "JSON Result Schema" and "Features" sections in the main [README.md](README.md): they show exactly what a benchmark run captures.
 
 ---
 
