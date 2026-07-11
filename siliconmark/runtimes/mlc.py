@@ -1,4 +1,4 @@
-"""MLC-LLM runtime adapter — uses the MLC Python SDK (streaming chat completions)."""
+"""MLC-LLM runtime adapter: uses the MLC Python SDK (streaming chat completions)."""
 
 from __future__ import annotations
 

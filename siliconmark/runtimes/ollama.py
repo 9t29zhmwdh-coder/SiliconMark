@@ -1,4 +1,4 @@
-"""Ollama runtime adapter — uses the Ollama streaming REST API."""
+"""Ollama runtime adapter: uses the Ollama streaming REST API."""
 
 from __future__ import annotations
 

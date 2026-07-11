@@ -1,4 +1,4 @@
-"""BenchmarkRunner — orchestrates a full run with metrics collection."""
+"""BenchmarkRunner: orchestrates a full run with metrics collection."""
 
 from __future__ import annotations
 
@@ -75,12 +75,12 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
             progress.update(
                 task,
                 description=(
-                    f"Run {run_idx + 1}/{config.num_runs} — "
+                    f"Run {run_idx + 1}/{config.num_runs}: "
                     f"{config.max_tokens} tokens via {config.runtime}…"
                 ),
             )
 
-            # Start power sampling before inference and stop after — captures the full
+            # Start power sampling before inference and stop after, capturing the full
             # inference window regardless of duration, then averages all collected samples.
             apple_session = PowermetricsSession(sample_interval_ms=200)
             apple_session.start()

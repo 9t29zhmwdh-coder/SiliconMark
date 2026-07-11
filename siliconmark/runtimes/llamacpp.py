@@ -1,4 +1,4 @@
-"""llama.cpp server runtime adapter — uses the HTTP completion API."""
+"""llama.cpp server runtime adapter: uses the HTTP completion API."""
 
 from __future__ import annotations
 

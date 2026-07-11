@@ -1,4 +1,4 @@
-"""Runtime registry — maps names to adapter classes."""
+"""Runtime registry: maps names to adapter classes."""
 
 from __future__ import annotations
 
@@ -16,8 +16,8 @@ _REGISTRY: dict[str, str] = {
 }
 
 _DESCRIPTIONS: dict[str, str] = {
-    "ollama": "Ollama REST API  — localhost:11434  (ollama serve)",
-    "llamacpp": "llama.cpp server — localhost:8080   (llama-server -m model.gguf)",
+    "ollama": "Ollama REST API, localhost:11434  (ollama serve)",
+    "llamacpp": "llama.cpp server, localhost:8080   (llama-server -m model.gguf)",
     "mlc": "MLC-LLM Python SDK (pip install mlc-llm)",
     "gguf": "Direct GGUF via llama-cpp-python (pip install siliconmark[gguf])",
 }
