@@ -1,4 +1,4 @@
-"""SiliconMark CLI — entry point for all benchmark commands."""
+"""SiliconMark CLI: entry point for all benchmark commands."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from siliconmark.exporters.json_exporter import export_result
 
 app = typer.Typer(
     name="siliconmark",
-    help="Apple Silicon LLM Benchmark Suite — measure Token/s, RAM, Power & Temperature.",
+    help="Apple Silicon LLM Benchmark Suite: measure Token/s, RAM, Power & Temperature.",
     add_completion=False,
     no_args_is_help=True,
 )

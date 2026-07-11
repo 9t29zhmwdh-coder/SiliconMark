@@ -1,4 +1,4 @@
-"""FastAPI dashboard server — serves the HTML UI and exposes /api/results."""
+"""FastAPI dashboard server: serves the HTML UI and exposes /api/results."""
 
 from __future__ import annotations
 

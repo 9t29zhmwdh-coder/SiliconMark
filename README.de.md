@@ -9,7 +9,9 @@
 
 **Apple Silicon LLM Benchmark Suite: Token/s, RAM, Leistung, ANE · Ollama · llama.cpp · MLC · GGUF**
 
-SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silicon:brauch, Energiebedarf, ANE-Aktivität und Temperatur, alles über ein einziges CLI.
+SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silicon: Token/s, RAM-Verbrauch, Energiebedarf, ANE-Aktivität und Temperatur, alles über ein einziges CLI.
+
+![SiliconMark](docs/screenshot.png)
 
 ---
 

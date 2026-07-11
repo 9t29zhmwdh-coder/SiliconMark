@@ -5,6 +5,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.1.3] - 2026-07-11
+
+### Added
+
+- Added a real dashboard screenshot to README.md/README.de.md (docs/screenshot.png), captured from the actual FastAPI/Chart.js web dashboard
+
+### Fixed
+
+- Removed em-dashes from module docstrings and CLI help text across the codebase, replaced with colons or plain commas
+- Fixed a broken sentence in README.de.md (missing "Token/s, RAM-Verbrauch" text)
+
 ## [0.1.2] - 2026-07-10
 
 ### Fixed

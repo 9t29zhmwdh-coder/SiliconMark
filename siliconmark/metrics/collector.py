@@ -1,4 +1,4 @@
-"""Background system metrics collector — samples RAM and CPU at a fixed interval."""
+"""Background system metrics collector, samples RAM and CPU at a fixed interval."""
 
 from __future__ import annotations
 
