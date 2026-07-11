@@ -22,5 +22,5 @@ I aim to respond within 72 hours and will keep you informed throughout the proce
 
 ## Scope
 
-This project runs **fully locally** — no data is sent to external servers. 
+This project runs **fully locally**, no data is sent to external servers. 
 Network access (if any) is limited to local network resources only.
