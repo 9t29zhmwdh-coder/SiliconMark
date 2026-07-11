@@ -281,11 +281,11 @@
         <td class="tps-cell">${p.tokens_per_second.toFixed(1)}</td>
         <td>${p.total_tokens}</td>
         <td>${p.total_duration_s.toFixed(2)} s</td>
-        <td>${p.time_to_first_token_ms != null ? p.time_to_first_token_ms.toFixed(0) + " ms" : "—"}</td>
+        <td>${p.time_to_first_token_ms != null ? p.time_to_first_token_ms.toFixed(0) + " ms" : "N/A"}</td>
         <td>${s.ram_used_gb_peak.toFixed(2)} GB</td>
         <td>${s.cpu_percent_mean.toFixed(1)} %</td>
-        <td>${a.package_power_mw != null ? a.package_power_mw.toFixed(0) : "—"}</td>
-        <td>${a.cpu_die_temp_celsius != null ? a.cpu_die_temp_celsius.toFixed(1) + " °C" : "—"}</td>
+        <td>${a.package_power_mw != null ? a.package_power_mw.toFixed(0) : "N/A"}</td>
+        <td>${a.cpu_die_temp_celsius != null ? a.cpu_die_temp_celsius.toFixed(1) + " °C" : "N/A"}</td>
       `;
       tbody.appendChild(tr);
     });

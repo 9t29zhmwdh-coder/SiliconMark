@@ -1,4 +1,4 @@
-# Architecture — SiliconMark
+# Architecture: SiliconMark
 
 ## Overview
 
@@ -11,9 +11,9 @@ SiliconMark/
 │   ├── cli.py              # CLI entry point (argparse)
 │   ├── runtimes/
 │   │   ├── __init__.py
-│   │   ├── ollama.py       # OllamaRuntime — HTTP API
-│   │   ├── gguf.py         # GGUFRuntime — llama-cpp-python
-│   │   └── mlc.py          # MLCRuntime — MLC-LLM
+│   │   ├── ollama.py       # OllamaRuntime: HTTP API
+│   │   ├── gguf.py         # GGUFRuntime: llama-cpp-python
+│   │   └── mlc.py          # MLCRuntime: MLC-LLM
 │   ├── metrics/
 │   │   ├── __init__.py
 │   │   ├── collector.py    # MetricsCollector (psutil + threading)
@@ -46,6 +46,6 @@ SiliconMark/
 
 - Tokens per second (prompt + generation)
 - Peak RAM (RSS, GB)
-- Average power draw (W) — requires sudo for powermetrics
-- ANE activity (%) — Apple Neural Engine
+- Average power draw (W), requires sudo for powermetrics
+- ANE activity (%), Apple Neural Engine
 - Die temperature (°C)

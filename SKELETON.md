@@ -1,4 +1,4 @@
-# Skeleton — SiliconMark
+# Skeleton: SiliconMark
 
 This file documents the repository structure and CI expectations for contributors.
 
@@ -32,13 +32,13 @@ SiliconMark/
 
 ## CI Expectations
 
-- `ruff check .` — must pass
-- `ruff format --check .` — must pass
-- `pytest` — must pass
+- `ruff check .`: must pass
+- `ruff format --check .`: must pass
+- `pytest`: must pass
 - Type hints maintained throughout
 
 ## Branch Strategy
 
-- `main` — stable, tagged releases
-- `dev` — integration branch
+- `main`: stable, tagged releases
+- `dev`: integration branch
 - Feature branches: `feat/<name>`
