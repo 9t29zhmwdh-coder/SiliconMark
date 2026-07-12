@@ -25,6 +25,7 @@ jobs:
         run: pytest tests/ -v
       - name: Security audit
         run: |
+          pip install --upgrade pip setuptools
           pip install pip-audit
           pip-audit --skip-editable
       - name: Build wheel and sdist
