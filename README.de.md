@@ -45,9 +45,8 @@ SiliconMark misst die Inferenz-Performance lokaler LLM-Runtimes auf Apple Silico
 ## Schnellstart
 
 ```bash
-git clone https://github.com/9t29zhmwdh-coder/SiliconMark
-cd SiliconMark
-pip install -e .
+# Neueste Version direkt von GitHub installieren
+pip install git+https://github.com/9t29zhmwdh-coder/SiliconMark.git
 
 # Ollama benchmarken
 siliconmark benchmark --runtime ollama --model llama3
