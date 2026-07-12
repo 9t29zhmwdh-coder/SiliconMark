@@ -46,13 +46,21 @@ Measure real-world inference performance of local LLM runtimes on Apple Silicon:
 ## Installation
 
 ```bash
-# Clone and install in editable mode
-git clone https://github.com/9t29zhmwdh-coder/siliconmark.git
-cd siliconmark
-pip install -e .
+# Install the latest version directly from GitHub
+pip install git+https://github.com/9t29zhmwdh-coder/SiliconMark.git
 
 # Optional: GGUF support (llama-cpp-python with Metal)
-pip install -e ".[gguf]"
+pip install "siliconmark[gguf] @ git+https://github.com/9t29zhmwdh-coder/SiliconMark.git"
+```
+
+Versioned wheel and sdist files are also attached to each [GitHub Release](https://github.com/9t29zhmwdh-coder/SiliconMark/releases) if you want to pin an exact version or install offline.
+
+Or clone and install in editable mode for development:
+
+```bash
+git clone https://github.com/9t29zhmwdh-coder/SiliconMark.git
+cd SiliconMark
+pip install -e .
 ```
 
 ---

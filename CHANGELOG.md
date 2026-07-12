@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.1.7] - 2026-07-12
+
+### Added
+
+- Release workflow (`release.yml`) building a wheel and sdist via `python -m build` and attaching them to a GitHub Release on every `v*` tag push. Previously releases were tag-only with no installable artifact.
+- `pip-audit` step in CI.
+
+### Fixed
+
+- README installation instructions replaced with `pip install git+https://github.com/9t29zhmwdh-coder/SiliconMark.git` (no clone required, always the latest commit); fixed an incorrect lowercase repo URL in the previous instructions. Editable clone install kept as the documented path for development.
+- Pinned `actions/checkout` and `actions/setup-python` in `ci.yml` to a commit SHA instead of a mutable tag, per the portfolio's supply-chain integrity standard.
+
 ## [0.1.6] - 2026-07-11
 
 ### Fixed
