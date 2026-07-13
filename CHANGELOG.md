@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.1.8] - 2026-07-13
+
+### Added
+
+- README.de.md was missing 7 whole sections that README.md has (Installation, CLI Reference, JSON Result Schema, Runtime Setup, Adding a Custom Runtime, Project Structure, Development) and its remaining content was stale (referenced a removed `--all` flag and an old `benchmark` subcommand name). Fully rewritten to match README.md.
+
+### Fixed
+
+- Fixed a formatting bug in the "run" CLI reference table (`--model-path` showed a stray semicolon instead of a "no default" marker), in both languages.
+
 ## [0.1.7] - 2026-07-12
 
 ### Added

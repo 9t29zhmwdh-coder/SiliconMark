@@ -101,7 +101,7 @@ Commands:
 |--------|---------|-------------|
 | `--runtime` / `-r` | *(required)* | `ollama` · `llamacpp` · `mlc` · `gguf` |
 | `--model` / `-m` | *(required)* | Model name (e.g. `llama3.2:3b`) |
-| `--model-path` / `-p` |; | Path to `.gguf` file (gguf runtime only) |
+| `--model-path` / `-p` | - | Path to `.gguf` file (gguf runtime only) |
 | `--tokens` / `-t` | `200` | Number of tokens to generate |
 | `--prompt` | *(default)* | Custom benchmark prompt |
 | `--output` / `-o` | `./results` | Directory to save JSON results |
