@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.0] - 2026-07-17
+
+First stable release: a real, installable distribution (a real PyPI-style
+wheel/sdist, attached to every GitHub Release) already exists for end
+users, the prerequisite for a 1.0 release per this portfolio's own
+SemVer discipline.
+
 ## [0.1.9] - 2026-07-17
 
 ### Changed
