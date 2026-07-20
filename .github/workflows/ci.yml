@@ -25,7 +25,7 @@ jobs:
       - name: Format check
         run: ruff format --check .
       - name: Test
-        run: pytest tests/ -v
+        run: pytest tests/ -v --cov=siliconmark --cov-report=term-missing
       - name: Security audit
         run: |
           pip install --upgrade pip setuptools
