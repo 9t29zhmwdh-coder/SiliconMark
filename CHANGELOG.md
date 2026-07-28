@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.2] - 2026-07-28
+
+### Added
+
+- `.github/dependabot.yml`, with grouped weekly updates. The file was missing, and without it there are no version updates at all: repository security alerts only fire for disclosed vulnerabilities, which is how action pins across this portfolio quietly went stale. Follows `engineering-standards` v0.10.0.
+
+### Fixed
+
+- `actions/checkout` pins now carry the full version in the comment instead of a bare major, and all workflows use the same SHA.
+
 ## [1.0.1] - 2026-07-20
 
 ### Changed
