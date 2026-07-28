@@ -25,10 +25,10 @@ jobs:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     permissions:
+      # Only what exceeds the workflow-level default of contents: read.
+      # Repeating read grants here is what OpenSSF Scorecard flags as
+      # excessive token permissions.
       security-events: write
-      packages: read
-      actions: read
-      contents: read
     strategy:
       fail-fast: false
       matrix:
