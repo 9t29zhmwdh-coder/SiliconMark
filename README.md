@@ -216,6 +216,7 @@ If not configured, SiliconMark runs normally but Apple-specific fields will be `
 # siliconmark/runtimes/myruntime.py
 from siliconmark.runtimes.base import BaseRuntime, InferenceResult
 
+
 class MyRuntime(BaseRuntime):
     name = "myruntime"
 

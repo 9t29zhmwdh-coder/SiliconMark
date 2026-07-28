@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from siliconmark.core.models import BenchmarkResult, BenchmarkSuite
 
 
@@ -38,6 +40,8 @@ def load_results(results_dir: Path) -> list[BenchmarkResult]:
                 results.extend(BenchmarkSuite.model_validate(data).results)
             else:
                 results.append(BenchmarkResult.model_validate(data))
-        except Exception:
+        except (OSError, json.JSONDecodeError, ValidationError):
+            # A malformed or unreadable result file is skipped rather than
+            # failing the whole load; the remaining results stay usable.
             continue
     return results

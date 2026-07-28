@@ -13,7 +13,6 @@ from siliconmark.core.models import (
 from siliconmark.metrics.collector import CollectorResult, MetricsSample
 from siliconmark.runtimes.base import BaseRuntime, InferenceResult
 
-
 # ── models ────────────────────────────────────────────────────────────────────
 
 

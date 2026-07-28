@@ -81,6 +81,7 @@ def sample_powermetrics(duration_ms: int = 1000) -> ApplePowerSnapshot:
             capture_output=True,
             text=True,
             timeout=duration_ms / 1000 + 5,
+            check=False,
         )
         if result.returncode != 0:
             return ApplePowerSnapshot()

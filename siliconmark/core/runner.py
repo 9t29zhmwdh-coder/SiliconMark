@@ -28,6 +28,7 @@ def get_device_name() -> str:
             capture_output=True,
             text=True,
             timeout=5,
+            check=False,
         ).stdout.strip()
         if out:
             ram = _total_ram_gb()
@@ -42,7 +43,9 @@ def _total_ram_gb() -> int | None:
         import psutil
 
         return round(psutil.virtual_memory().total / 1024**3)
-    except Exception:
+    except (ImportError, OSError):
+        # psutil is an optional dependency and can fail on platforms without
+        # the underlying syscalls; reporting no RAM figure is acceptable.
         return None
 
 

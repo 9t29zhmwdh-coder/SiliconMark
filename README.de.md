@@ -216,6 +216,7 @@ Falls nicht konfiguriert, läuft SiliconMark normal weiter, Apple-spezifische Fe
 # siliconmark/runtimes/myruntime.py
 from siliconmark.runtimes.base import BaseRuntime, InferenceResult
 
+
 class MyRuntime(BaseRuntime):
     name = "myruntime"
 
