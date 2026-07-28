@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "siliconmark"
-version = "1.0.1"
+version = "1.0.3"
 description = "Apple Silicon LLM Benchmark Suite: Ollama, llama.cpp, MLC, GGUF"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -25,7 +25,7 @@ dependencies = [
 [project.optional-dependencies]
 gguf = ["llama-cpp-python>=0.2"]
 mlc  = ["mlc-llm>=0.1"]
-dev  = ["pytest>=8", "pytest-asyncio>=0.23", "pytest-cov>=5", "ruff>=0.4"]
+dev  = ["pytest>=8", "pytest-asyncio>=0.23", "pytest-cov>=5", "ruff==0.16.0"]
 
 [project.scripts]
 siliconmark = "siliconmark.cli:app"
@@ -36,3 +36,8 @@ packages = ["siliconmark"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+[tool.ruff.lint.flake8-bugbear]
+# typer requires its Option/Argument objects in argument defaults; that is the
+# documented API, not an accident, so B008 does not apply to them.
+extend-immutable-calls = ["typer.Option", "typer.Argument", "pathlib.Path.home"]

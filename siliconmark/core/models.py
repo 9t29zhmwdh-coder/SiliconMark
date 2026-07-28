@@ -4,17 +4,16 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
 
 class AppleMetrics(BaseModel):
-    cpu_power_mw: Optional[float] = None
-    gpu_power_mw: Optional[float] = None
-    ane_power_mw: Optional[float] = None
-    package_power_mw: Optional[float] = None
-    cpu_die_temp_celsius: Optional[float] = None
+    cpu_power_mw: float | None = None
+    gpu_power_mw: float | None = None
+    ane_power_mw: float | None = None
+    package_power_mw: float | None = None
+    cpu_die_temp_celsius: float | None = None
 
 
 class SystemMetrics(BaseModel):
@@ -27,18 +26,18 @@ class SystemMetrics(BaseModel):
 
 class PerformanceMetrics(BaseModel):
     tokens_per_second: float
-    time_to_first_token_ms: Optional[float] = None
+    time_to_first_token_ms: float | None = None
     total_tokens: int
     total_duration_s: float
-    prompt_tokens: Optional[int] = None
+    prompt_tokens: int | None = None
 
 
 class ModelInfo(BaseModel):
     name: str
-    path: Optional[str] = None
-    size_gb: Optional[float] = None
-    quantization: Optional[str] = None
-    context_length: Optional[int] = None
+    path: str | None = None
+    size_gb: float | None = None
+    quantization: str | None = None
+    context_length: int | None = None
 
 
 class BenchmarkConfig(BaseModel):

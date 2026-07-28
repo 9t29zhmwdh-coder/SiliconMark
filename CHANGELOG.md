@@ -5,6 +5,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.3] - 2026-07-28
+
+### Fixed
+
+- CI went red without a single source change. `ruff` was declared as `>=0.4`, so the runner picked up 0.16.0, and that release **widened ruff's default rule set**. This repository configures no `select` at all, so it inherits whatever the default happens to be. 21 findings appeared from rules that were simply not part of the default before.
+- Blind `except Exception` in `core/runner.py` and `exporters/json_exporter.py` replaced with the exceptions that can actually occur there (`ImportError`/`OSError` for the optional psutil import, `OSError`/`JSONDecodeError`/`ValidationError` for result file parsing). This also resolves the S112 finding about silently swallowing errors, at the cause rather than by adding a logger to a project that has none.
+- `subprocess.run` calls now pass `check=False` explicitly. The default was already `False`, so behaviour is unchanged; the call now states its intent.
+- 11 `Optional[X]` annotations converted to `X | None`, plus one unsorted import block and two files reformatted.
+
+### Changed
+
+- `ruff` is pinned to 0.16.0 instead of `>=0.4`, per `engineering-standards` v0.7.0. Without the pin the next default-set change repeats this.
+- `B008` is configured away for `typer.Option`, `typer.Argument` and `Path.home` via `extend-immutable-calls`. Passing typer objects as argument defaults is the documented typer API, not an oversight, and "fixing" it would break the CLI.
+
+## [1.0.2] - 2026-07-28
+
+### Added
+
+- `.github/dependabot.yml`, with grouped weekly updates. The file was missing, and without it there are no version updates at all: repository security alerts only fire for disclosed vulnerabilities, which is how action pins across this portfolio quietly went stale. Follows `engineering-standards` v0.10.0.
+
+### Fixed
+
+- `actions/checkout` pins now carry the full version in the comment instead of a bare major, and all workflows use the same SHA.
+
 ## [1.0.1] - 2026-07-20
 
 ### Changed
