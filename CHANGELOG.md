@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.5] - 2026-07-29
+
+### Changed
+
+Dependency and workflow updates merged since 1.0.4:
+
+- chore(ci): bump the actions group across 1 directory with 4 updates
+
+---
+
 ## [1.0.4] - 2026-07-28
 
 ### Changed
