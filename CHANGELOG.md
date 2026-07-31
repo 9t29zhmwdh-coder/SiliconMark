@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.7] - 2026-07-31
+
+### Changed
+
+- Both READMEs now open with the question that sends someone here, which is whether a model will actually run on their Mac before they spend an hour downloading it, rather than naming the metric list. The four commands follow directly, and a short paragraph says that comparing Macs you do not own is what published benchmark tables are for.
+
+---
+
 ## [1.0.6] - 2026-07-29
 
 ### Security
