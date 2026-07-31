@@ -6,9 +6,25 @@
 
 [🇩🇪 Deutsche Version](README.de.md)
 
-**Apple Silicon LLM Benchmark Suite**
+**Tells you whether that model will actually run on your Mac, before you spend an hour downloading it.**
 
-Measure real-world inference performance of local LLM runtimes on Apple Silicon: Token/s, RAM usage, power draw, ANE activity and temperature, all from one CLI.
+The model card says 7B parameters. That does not say whether it fits in your
+unified memory alongside everything else you have open, how fast it will
+answer, or whether your MacBook will run hot and drain the battery doing it.
+
+SiliconMark measures it on your machine: tokens per second, RAM, power draw,
+Neural Engine activity and temperature.
+
+```
+siliconmark list-runtimes    what is installed and usable
+siliconmark run              benchmark a model, get the numbers
+siliconmark device           what this Mac is
+siliconmark dashboard        the results, side by side
+```
+
+**Not for you if** you want to compare Macs you do not own. Published
+benchmark tables answer that. This measures the machine you are sitting at,
+with your models and your memory pressure.
 
 [![CI](https://github.com/9t29zhmwdh-coder/SiliconMark/actions/workflows/ci.yml/badge.svg)](https://github.com/9t29zhmwdh-coder/SiliconMark/actions) [![CodeQL](https://github.com/9t29zhmwdh-coder/SiliconMark/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/9t29zhmwdh-coder/SiliconMark/security/code-scanning) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/9t29zhmwdh-coder/SiliconMark/badge)](https://securityscorecards.dev/viewer/?uri=github.com/9t29zhmwdh-coder/SiliconMark) [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13685/badge)](https://www.bestpractices.dev/projects/13685)
 ![Apple Silicon](https://img.shields.io/badge/Apple-Silicon-000000?logo=apple&logoColor=white) ![Platform](https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple&logoColor=black) ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![AI | Claude Code](https://img.shields.io/badge/AI-Claude_Code-black?logo=anthropic&logoColor=white) ![AI | Copilot](https://img.shields.io/badge/AI-Copilot-black?logo=github&logoColor=white) ![AI | Ollama](https://img.shields.io/badge/AI-Ollama-black?logo=ollama&logoColor=white)
