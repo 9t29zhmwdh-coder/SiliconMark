@@ -33,7 +33,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ github.ref_name }}" dist/* \
-            --repo ${{ github.repository }} \
-            --title "SiliconMark ${{ github.ref_name }}" \
-            --notes "See CHANGELOG.md for details. Install with: pip install <wheel URL from this release>."
+          # Legt das Release an, oder haengt die Dateien an ein bestehendes.
+          #
+          # Vorher brach der Schritt mit "a release with the same tag name already
+          # exists" ab, sobald das Release schon auf anderem Weg entstanden war. Das
+          # Ergebnis war ein Release ohne Downloads und ein roter Lauf, obwohl der
+          # Build erfolgreich war.
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            gh release upload "${{ github.ref_name }}" dist/* --clobber
+          else
+            gh release create "${{ github.ref_name }}" dist/* --repo ${{ github.repository }} --title "SiliconMark ${{ github.ref_name }}" --notes "See CHANGELOG.md for details. Install with: pip install <wheel URL from this release>."
+          fi
