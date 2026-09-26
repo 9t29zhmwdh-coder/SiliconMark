@@ -1,4 +1,4 @@
-"""Apple Silicon power & thermal metrics via powermetrics (requires passwordless sudo)."""
+"""Apple Silicon power and thermal pressure via powermetrics (requires passwordless sudo)."""
 
 from __future__ import annotations
 
@@ -13,7 +13,18 @@ class ApplePowerSnapshot:
     gpu_power_mw: float | None = None
     ane_power_mw: float | None = None
     package_power_mw: float | None = None
-    cpu_die_temp_celsius: float | None = None
+    thermal_pressure: str | None = None
+
+
+# powermetrics on Apple Silicon reports no die temperature (that was an SMC
+# reading on Intel Macs), only macOS's thermal pressure level. Ordered from
+# cool to throttling; a run reports the worst level it reached.
+THERMAL_LEVELS = ("Nominal", "Moderate", "Heavy", "Trapping", "Sleeping")
+
+
+def worst_thermal_pressure(levels: list[str]) -> str | None:
+    known = [lvl for lvl in levels if lvl in THERMAL_LEVELS]
+    return max(known, key=THERMAL_LEVELS.index) if known else None
 
 
 class PowermetricsSession:
@@ -102,12 +113,7 @@ def _parse_averaged(raw: str) -> ApplePowerSnapshot:
     pkg_vals = [
         float(m) for m in re.findall(r"^Combined Power[^:]*:\s+([\d.]+)\s+mW", raw, re.MULTILINE)
     ]
-    temp_vals = [
-        float(m)
-        for m in re.findall(
-            r"CPU die temperature:\s+([\d.]+)\s+C", raw, re.MULTILINE | re.IGNORECASE
-        )
-    ]
+    pressure_levels = re.findall(r"Current pressure level:\s+(\w+)", raw)
 
     cpu_avg = _avg(cpu_vals)
     gpu_avg = _avg(gpu_vals)
@@ -122,5 +128,5 @@ def _parse_averaged(raw: str) -> ApplePowerSnapshot:
         gpu_power_mw=gpu_avg,
         ane_power_mw=ane_avg,
         package_power_mw=pkg_avg,
-        cpu_die_temp_celsius=_avg(temp_vals),
+        thermal_pressure=worst_thermal_pressure(pressure_levels),
     )

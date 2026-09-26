@@ -5,6 +5,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.0] - 2026-09-26
+
+### Changed
+
+- Thermal pressure replaces the CPU die temperature. `powermetrics` on Apple Silicon reports no die temperature at all, only macOS's thermal pressure level, so `cpu_die_temp_celsius` was `null` on every supported machine. Runs now record the worst level reached (Nominal, Moderate, Heavy, Trapping) as `thermal_pressure` in the JSON, the terminal summary and the dashboard. Result files from older versions still load.
+- The RAM figures are labelled as what they are: system RAM in use during the run, not the model's own footprint.
+
+### Fixed
+
+- `list-runtimes` promised to show what is usable but listed every runtime alike. It now checks each one: Ollama and the llama.cpp server have to answer, MLC and llama-cpp-python have to be importable.
+- `list-runtimes` dropped `[gguf]` from `pip install siliconmark[gguf]`, because the terminal renderer read it as a formatting tag.
+- The version was out of step: `pyproject.toml` said 1.0.8 and `siliconmark.__version__` 0.1.5. Both now say 1.1.0.
+
+### Security
+
+- The README no longer recommends a permanent passwordless `sudo` rule for `powermetrics`. `powermetrics` can write its output to any file as root, so the rule is now set up for a benchmark session in `/etc/sudoers.d/` and removed afterwards.
+
+Verified on an M4 Pro with Ollama and `qwen2.5:0.5b`: power values and a thermal pressure of "Nominal" recorded, `list-runtimes` marks Ollama usable and the others not, the dashboard shows the new column.
+
+---
+
 ## [1.0.9] - 2026-08-04
 
 ### Fixed

@@ -31,7 +31,7 @@ SiliconMark/
 2. **Runtime** loads the specified model and runs inference
 3. **MetricsCollector** samples psutil (RAM, CPU%) in a background thread
 4. **powermetrics** captures ANE activity, GPU power, and package power (requires sudo)
-5. **Benchmark** aggregates: tokens/s, peak RAM, avg power, temperature
+5. **Benchmark** aggregates: tokens/s, peak system RAM, avg power, worst thermal pressure
 6. **Output** writes structured JSON and optional CSV
 
 ## Supported Runtimes
@@ -45,7 +45,7 @@ SiliconMark/
 ## Metrics
 
 - Tokens per second (prompt + generation)
-- Peak RAM (RSS, GB)
+- Peak system RAM in use (GB)
 - Average power draw (W), requires sudo for powermetrics
 - ANE activity (%), Apple Neural Engine
-- Die temperature (°C)
+- Thermal pressure level (Apple Silicon reports no die temperature)

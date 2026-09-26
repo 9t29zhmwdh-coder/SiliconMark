@@ -6,16 +6,17 @@ from pathlib import Path
 
 import typer
 from rich.console import Console
+from rich.markup import escape
 from rich.table import Table
 
 from siliconmark.core.models import BenchmarkConfig, ModelInfo
-from siliconmark.core.registry import list_runtimes
+from siliconmark.core.registry import list_runtimes, runtime_available
 from siliconmark.core.runner import get_device_name, run_benchmark
 from siliconmark.exporters.json_exporter import export_result
 
 app = typer.Typer(
     name="siliconmark",
-    help="Apple Silicon LLM Benchmark Suite: measure Token/s, RAM, Power & Temperature.",
+    help="Apple Silicon LLM Benchmark Suite: measure Token/s, RAM, power and thermal pressure.",
     add_completion=False,
     no_args_is_help=True,
 )
@@ -86,9 +87,13 @@ def list_runtimes_cmd():
     """List all available runtime adapters."""
     table = Table(title="Available Runtimes", show_header=True, header_style="bold cyan")
     table.add_column("Runtime", style="bold")
+    table.add_column("Usable")
     table.add_column("Description")
     for name, desc in list_runtimes():
-        table.add_row(name, desc)
+        usable = "[green]yes[/]" if runtime_available(name) else "[dim]no[/]"
+        # Descriptions contain pip extras like "siliconmark[gguf]", which rich
+        # would otherwise swallow as a markup tag.
+        table.add_row(name, usable, escape(desc))
     console.print(table)
 
 
@@ -148,8 +153,9 @@ def _print_result(result) -> None:
         table.add_row("Time to first token", f"{p.time_to_first_token_ms:.0f} ms")
     if p.prompt_tokens:
         table.add_row("Prompt tokens", str(p.prompt_tokens))
-    table.add_row("RAM mean", f"{s.ram_used_gb_mean:.2f} GB")
-    table.add_row("RAM peak", f"{s.ram_used_gb_peak:.2f} GB")
+    # psutil's system-wide figure, not the model's own footprint.
+    table.add_row("System RAM mean", f"{s.ram_used_gb_mean:.2f} GB")
+    table.add_row("System RAM peak", f"{s.ram_used_gb_peak:.2f} GB")
     table.add_row("CPU usage", f"{s.cpu_percent_mean:.1f} %")
 
     if a.package_power_mw is not None:
@@ -160,8 +166,8 @@ def _print_result(result) -> None:
         table.add_row("GPU power", f"{a.gpu_power_mw:.0f} mW")
     if a.ane_power_mw is not None:
         table.add_row("ANE power", f"{a.ane_power_mw:.0f} mW")
-    if a.cpu_die_temp_celsius is not None:
-        table.add_row("CPU temp", f"{a.cpu_die_temp_celsius:.1f} °C")
+    if a.thermal_pressure is not None:
+        table.add_row("Thermal pressure", a.thermal_pressure)
 
     console.print()
     console.print(table)

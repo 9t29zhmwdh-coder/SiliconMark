@@ -13,10 +13,10 @@ allem anderen, was du offen hast, in den Unified Memory passt, wie schnell es
 antwortet, oder ob dein MacBook dabei heiss läuft und den Akku leersaugt.
 
 SiliconMark misst das auf deiner Maschine: Token pro Sekunde, RAM,
-Energiebedarf, Neural-Engine-Auslastung und Temperatur.
+Energiebedarf, Neural-Engine-Auslastung und thermische Last.
 
 ```
-siliconmark list-runtimes    was installiert und nutzbar ist
+siliconmark list-runtimes    welche Runtimes gerade nutzbar sind
 siliconmark run              ein Modell benchmarken, Zahlen bekommen
 siliconmark device           was dieser Mac ist
 siliconmark dashboard        die Ergebnisse nebeneinander
@@ -42,8 +42,8 @@ an der du sitzt, mit deinen Modellen und deinem Speicherdruck.
 | | |
 |---|---|
 | **Runtimes** | Ollama · llama.cpp Server · MLC-LLM · Direktes GGUF (llama-cpp-python) |
-| **Metriken** | Token/s · Zeit bis zum ersten Token · RAM (Mittelwert & Peak) · CPU-Auslastung |
-| **Apple-spezifisch** | Package-/CPU-/GPU-/ANE-Leistung (mW) · CPU-Die-Temperatur |
+| **Metriken** | Token/s · Zeit bis zum ersten Token · belegter System-RAM (Mittelwert & Peak) · CPU-Auslastung |
+| **Apple-spezifisch** | Package-/CPU-/GPU-/ANE-Leistung (mW) · thermische Last (Nominal bis Trapping) |
 | **Export** | Strukturiertes JSON: eine Datei pro Lauf |
 | **Dashboard** | Web-UI mit Chart.js-Diagrammen: `siliconmark dashboard` |
 | **Erweiterbar** | Neue Runtime in ~40 Zeilen durch Subklassen von `BaseRuntime` |
@@ -108,7 +108,7 @@ Usage: siliconmark [OPTIONS] COMMAND [ARGS]...
 Commands:
   run             Führt einen Benchmark aus (Runtime + Modell)
   dashboard       Startet das Web-Dashboard
-  list-runtimes   Zeigt alle verfügbaren Runtimes
+  list-runtimes   Zeigt jede Runtime und ob sie gerade nutzbar ist
   device          Gibt den erkannten Apple-Silicon-Chip aus
 ```
 
@@ -166,7 +166,7 @@ Jeder Lauf speichert eine Datei in `./results/`:
       "gpu_power_mw": 1820,
       "ane_power_mw": 540,
       "package_power_mw": 5600,
-      "cpu_die_temp_celsius": 48.3
+      "thermal_pressure": "Nominal"
     }
   }
 }
@@ -210,15 +210,19 @@ pip install mlc-llm
 
 ## Energiemetriken aktivieren
 
-Leistungs- und Temperaturmetriken benötigen passwortloses `sudo` für `powermetrics`.
+Leistung und thermische Last brauchen passwortloses `sudo` für `powermetrics`. Apple Silicon liefert in `powermetrics` keine Die-Temperatur (das war ein Intel-Wert); macOS meldet stattdessen eine Stufe der thermischen Last, und SiliconMark hält die höchste Stufe eines Laufs fest.
+
+Die Freigabe nur für die Messung einrichten und danach wieder entfernen. `powermetrics` kann seine Ausgabe in jede beliebige Datei schreiben (`-o`), eine dauerhafte Regel ohne Passwort erlaubt also allem, was unter deinem Konto läuft, Dateien als root zu überschreiben.
 
 ```bash
-sudo visudo
-# Diese Zeile hinzufügen (YOUR_USERNAME ersetzen):
-YOUR_USERNAME ALL=(ALL) NOPASSWD: /usr/bin/powermetrics
+# vor der Messung
+sudo sh -c 'echo "$(logname) ALL=(root) NOPASSWD: /usr/bin/powermetrics" > /etc/sudoers.d/siliconmark && chmod 440 /etc/sudoers.d/siliconmark && visudo -cf /etc/sudoers.d/siliconmark'
+
+# danach
+sudo rm /etc/sudoers.d/siliconmark
 ```
 
-Falls nicht konfiguriert, läuft SiliconMark normal weiter, Apple-spezifische Felder sind dann `null`.
+Ohne Freigabe läuft SiliconMark normal weiter, die Apple-spezifischen Felder sind dann `null`.
 
 ---
 
