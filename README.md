@@ -13,10 +13,10 @@ unified memory alongside everything else you have open, how fast it will
 answer, or whether your MacBook will run hot and drain the battery doing it.
 
 SiliconMark measures it on your machine: tokens per second, RAM, power draw,
-Neural Engine activity and temperature.
+Neural Engine activity and thermal pressure.
 
 ```
-siliconmark list-runtimes    what is installed and usable
+siliconmark list-runtimes    which runtimes are usable right now
 siliconmark run              benchmark a model, get the numbers
 siliconmark device           what this Mac is
 siliconmark dashboard        the results, side by side
@@ -42,8 +42,8 @@ with your models and your memory pressure.
 | | |
 |---|---|
 | **Runtimes** | Ollama · llama.cpp server · MLC-LLM · Direct GGUF (llama-cpp-python) |
-| **Metrics** | Token/s · Time-to-first-token · RAM (mean & peak) · CPU usage |
-| **Apple-specific** | Package / CPU / GPU / ANE power (mW) · CPU die temperature |
+| **Metrics** | Token/s · Time-to-first-token · system RAM in use (mean & peak) · CPU usage |
+| **Apple-specific** | Package / CPU / GPU / ANE power (mW) · thermal pressure (Nominal to Trapping) |
 | **Export** | Structured JSON: one file per run |
 | **Dashboard** | Web UI with Chart.js charts: `siliconmark dashboard` |
 | **Extensible** | Add a new runtime in ~40 lines by subclassing `BaseRuntime` |
@@ -108,7 +108,7 @@ Usage: siliconmark [OPTIONS] COMMAND [ARGS]...
 Commands:
   run             Run a benchmark (runtime + model)
   dashboard       Launch the web dashboard
-  list-runtimes   Show all available runtimes
+  list-runtimes   Show each runtime and whether it is usable now
   device          Print the detected Apple Silicon chip
 ```
 
@@ -166,7 +166,7 @@ Every run saves a file to `./results/`:
       "gpu_power_mw": 1820,
       "ane_power_mw": 540,
       "package_power_mw": 5600,
-      "cpu_die_temp_celsius": 48.3
+      "thermal_pressure": "Nominal"
     }
   }
 }
@@ -210,15 +210,19 @@ pip install mlc-llm
 
 ## Enabling Power Metrics
 
-Power and temperature metrics require passwordless `sudo` for `powermetrics`.
+Power and thermal pressure require passwordless `sudo` for `powermetrics`. Apple Silicon has no die temperature in `powermetrics` (that was an Intel reading); macOS reports a thermal pressure level instead, and SiliconMark records the worst level a run reached.
+
+Grant it only for the benchmark session and remove it afterwards. `powermetrics` can write its output to any file (`-o`), so a permanent passwordless rule lets anything running as you overwrite files as root.
 
 ```bash
-sudo visudo
-# Add this line (replace YOUR_USERNAME):
-YOUR_USERNAME ALL=(ALL) NOPASSWD: /usr/bin/powermetrics
+# before benchmarking
+sudo sh -c 'echo "$(logname) ALL=(root) NOPASSWD: /usr/bin/powermetrics" > /etc/sudoers.d/siliconmark && chmod 440 /etc/sudoers.d/siliconmark && visudo -cf /etc/sudoers.d/siliconmark'
+
+# afterwards
+sudo rm /etc/sudoers.d/siliconmark
 ```
 
-If not configured, SiliconMark runs normally but Apple-specific fields will be `null`.
+Without it, SiliconMark runs normally and the Apple-specific fields are `null`.
 
 ---
 

@@ -119,7 +119,7 @@ def run_benchmark(config: BenchmarkConfig) -> BenchmarkResult:
                 gpu_power_mw=best_apple_snap.gpu_power_mw,
                 ane_power_mw=best_apple_snap.ane_power_mw,
                 package_power_mw=best_apple_snap.package_power_mw,
-                cpu_die_temp_celsius=best_apple_snap.cpu_die_temp_celsius,
+                thermal_pressure=best_apple_snap.thermal_pressure,
             ),
         ),
     )

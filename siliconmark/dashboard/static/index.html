@@ -206,7 +206,7 @@
           <th>RAM Peak</th>
           <th>CPU %</th>
           <th>Power (mW)</th>
-          <th>Temp</th>
+          <th>Thermal</th>
         </tr>
       </thead>
       <tbody id="results-body"></tbody>
@@ -285,7 +285,7 @@
         <td>${s.ram_used_gb_peak.toFixed(2)} GB</td>
         <td>${s.cpu_percent_mean.toFixed(1)} %</td>
         <td>${a.package_power_mw != null ? a.package_power_mw.toFixed(0) : "N/A"}</td>
-        <td>${a.cpu_die_temp_celsius != null ? a.cpu_die_temp_celsius.toFixed(1) + " °C" : "N/A"}</td>
+        <td>${a.thermal_pressure ?? "N/A"}</td>
       `;
       tbody.appendChild(tr);
     });

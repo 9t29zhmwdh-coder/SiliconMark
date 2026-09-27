@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import importlib
+import importlib.util
+import urllib.request
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -33,3 +35,26 @@ def get_runtime(name: str) -> type[BaseRuntime]:
 
 def list_runtimes() -> list[tuple[str, str]]:
     return [(k, _DESCRIPTIONS[k]) for k in _REGISTRY]
+
+
+def _answers(url: str) -> bool:
+    try:
+        with urllib.request.urlopen(url, timeout=1) as resp:
+            return resp.status == 200
+    except OSError:
+        return False
+
+
+# Servers must be running; SDKs must be importable.
+_CHECKS = {
+    "ollama": lambda: _answers("http://localhost:11434/api/version"),
+    "llamacpp": lambda: _answers("http://localhost:8080/health"),
+    "mlc": lambda: importlib.util.find_spec("mlc_llm") is not None,
+    "gguf": lambda: importlib.util.find_spec("llama_cpp") is not None,
+}
+
+
+def runtime_available(name: str) -> bool:
+    """Whether the runtime can be benchmarked right now."""
+    check = _CHECKS.get(name)
+    return bool(check and check())

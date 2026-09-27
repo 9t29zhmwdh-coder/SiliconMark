@@ -13,7 +13,7 @@ class AppleMetrics(BaseModel):
     gpu_power_mw: float | None = None
     ane_power_mw: float | None = None
     package_power_mw: float | None = None
-    cpu_die_temp_celsius: float | None = None
+    thermal_pressure: str | None = None
 
 
 class SystemMetrics(BaseModel):

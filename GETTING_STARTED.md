@@ -2,7 +2,7 @@
 
 This guide is for people with **no coding experience**. It walks you through every step needed to run SiliconMark, from opening a terminal to seeing your first benchmark result.
 
-> **Important:** SiliconMark only runs on **macOS with Apple Silicon** (M1/M2/M3/M4), because it reads Apple-specific hardware sensors (power draw, Neural Engine activity, CPU temperature). If you're on Windows or Linux, you cannot run SiliconMark directly on that machine: see the note at the end of this guide.
+> **Important:** SiliconMark only runs on **macOS with Apple Silicon** (M1/M2/M3/M4), because it reads Apple-specific hardware sensors (power draw, Neural Engine activity, thermal pressure). If you're on Windows or Linux, you cannot run SiliconMark directly on that machine: see the note at the end of this guide.
 
 ---
 
@@ -113,7 +113,7 @@ Then open the URL it prints (typically `http://127.0.0.1:8080`) in your browser.
 
 Running `siliconmark run --runtime ollama --model llama3.2:3b` prints live progress in the terminal, then a summary with tokens/second, time-to-first-token, and RAM usage. A JSON file with the full results is saved into `./results/`.
 
-Apple-specific fields (power draw, CPU temperature) will show as `null` unless you've enabled passwordless `sudo` for `powermetrics`: see the "Enabling Power Metrics" section in the main [README.md](README.md) if you want those numbers too. This step is optional; SiliconMark works fine without it.
+Apple-specific fields (power draw, thermal pressure) will show as `null` unless you've enabled passwordless `sudo` for `powermetrics`: see the "Enabling Power Metrics" section in the main [README.md](README.md) if you want those numbers too. This step is optional; SiliconMark works fine without it.
 
 ---
 
@@ -130,5 +130,5 @@ If you don't have access to a Mac but want to explore what SiliconMark produces,
 | `command not found: python3` | Python isn't installed, or Terminal was opened before installing it | Install Python from [python.org](https://www.python.org/downloads/) or via `brew install python@3.12`, then open a **new** Terminal window |
 | `command not found: siliconmark` after `pip install -e .` | The install succeeded but the command isn't on your `PATH`, common with certain Python installs | Try `python3 -m siliconmark.cli` instead, or re-check the `pip install -e .` output for a PATH warning near the end |
 | `siliconmark run` fails with a connection error to Ollama | `ollama serve` isn't running, or finished/crashed | Open a Terminal window, run `ollama serve`, and leave it running while you use SiliconMark in another window |
-| All Apple-specific fields (power, temperature) are `null` | Passwordless `sudo` for `powermetrics` isn't configured | This is optional and expected by default; follow "Enabling Power Metrics" in the main [README.md](README.md) if you want these values |
+| All Apple-specific fields (power, thermal pressure) are `null` | Passwordless `sudo` for `powermetrics` isn't configured | This is optional and expected by default; follow "Enabling Power Metrics" in the main [README.md](README.md) if you want these values |
 | `zsh: permission denied: ./scripts/...` or similar for any shell script | Script lacks the executable bit | Run `chmod +x path/to/script.sh` once, then try again |
