@@ -4,22 +4,24 @@
 
 | Version | Supported |
 |---------|-----------|
-| 1.0.x   | Yes       |
-| < 1.0 | No        |
+| Latest  | ✅ Yes    |
+| Older   | ❌ No     |
+
+Security fixes are only applied to the latest release.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please **do not** open a public GitHub issue.
+**Do NOT open a public GitHub issue for security vulnerabilities.**
 
-Instead, report it privately via the [GitHub Security Advisory](../../security/advisories/new) feature.
+Instead, report it privately via [GitHub Security Advisory](https://github.com/9t29zhmwdh-coder/SiliconMark/security/advisories/new) or contact the maintainer via the GitHub profile.
 
 Include:
-- A clear description of the vulnerability
+- Description of the vulnerability
 - Steps to reproduce
 - Potential impact
-- Suggested fix (if available)
+- Suggested fix (if any)
 
-I aim to respond within 72 hours and will keep you informed throughout the process.
+A response within **48 hours** is the target, and the issue will be worked on promptly.
 
 ## Scope
 
