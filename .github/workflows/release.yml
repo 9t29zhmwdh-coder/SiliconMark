@@ -23,11 +23,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install build tool
-        run: pip install build
+      - name: Install pinned build tools
+        run: pip install --require-hashes -r requirements/ci.txt
 
       - name: Build wheel and sdist
-        run: python -m build
+        run: python -m build --no-isolation
 
       - name: Create GitHub Release
         env:

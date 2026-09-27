@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.2] - 2026-09-27
+
+### Security
+
+- Every package the CI and the release build install now comes from `requirements/ci.txt` with its hash checked (`pip install --require-hashes`). Before, `pip install -e ".[dev]"`, `pip install pip-audit` and `pip install build` took whatever version the index served at that moment, which OpenSSF Scorecard scored 3 of 10 for pinned dependencies. The package itself is installed with `--no-deps`, and the wheel is built with `--no-isolation` so the build backend is the pinned `hatchling` rather than a fresh download.
+- CI checks that `requirements/ci.txt` still matches `pyproject.toml`, starting from the committed pins, so a changed dependency cannot slip past the lock.
+
+---
+
 ## [1.1.1] - 2026-09-27
 
 ### Security
