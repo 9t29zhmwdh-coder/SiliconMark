@@ -18,8 +18,17 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.11'
-      - name: Install package and dev deps
-        run: pip install -e ".[dev]"
+      # Every package comes from requirements/ci.txt with its hash checked;
+      # SiliconMark itself is installed without resolving anything further.
+      - name: Install pinned dependencies and tools
+        run: |
+          pip install --require-hashes -r requirements/ci.txt
+          pip install --no-deps -e .
+      - name: Lock file matches pyproject.toml
+        run: |
+          cp requirements/ci.txt fresh.txt
+          uv pip compile pyproject.toml requirements/tools.in --extra dev --universal --python-version 3.11 --generate-hashes -q --custom-compile-command "uv pip compile pyproject.toml requirements/tools.in --extra dev --universal --python-version 3.11 --generate-hashes -o requirements/ci.txt" -o fresh.txt
+          diff requirements/ci.txt fresh.txt
       - name: Lint
         run: ruff check --output-format=github .
       - name: Format check
@@ -27,11 +36,6 @@ jobs:
       - name: Test
         run: pytest tests/ -v --cov=siliconmark --cov-report=term-missing
       - name: Security audit
-        run: |
-          pip install --upgrade pip setuptools
-          pip install pip-audit
-          pip-audit --skip-editable
+        run: pip-audit --skip-editable
       - name: Build wheel and sdist
-        run: |
-          pip install build
-          python -m build
+        run: python -m build --no-isolation
