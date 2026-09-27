@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.3] - 2026-09-27
+
+### Security
+
+- The editable install in CI now runs with `--no-build-isolation`, so the build backend pinned in `requirements/ci.txt` builds it. Before, pip fetched a fresh, unpinned backend into an isolated environment for that one step, which undercut the hash-pinned installs from v1.1.2.
+- `editables` joins the lock, since hatchling needs it for editable installs once build isolation is off.
+- Workflows call `python -m pip` rather than `pip`, because `pip.exe` cannot replace itself on Windows when the lock pins a newer pip.
+
+---
+
 ## [1.1.2] - 2026-09-27
 
 ### Security

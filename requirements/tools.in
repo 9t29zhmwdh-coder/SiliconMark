@@ -9,3 +9,4 @@ hatchling
 # setuptools ships preinstalled (and outdated) with the runner's Python;
 # pinning it here upgrades it under hash checking so pip-audit passes.
 setuptools
+editables

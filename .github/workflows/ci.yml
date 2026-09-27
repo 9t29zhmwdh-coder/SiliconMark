@@ -22,8 +22,8 @@ jobs:
       # SiliconMark itself is installed without resolving anything further.
       - name: Install pinned dependencies and tools
         run: |
-          pip install --require-hashes -r requirements/ci.txt
-          pip install --no-deps -e .
+          python -m pip install --require-hashes -r requirements/ci.txt
+          python -m pip install --no-deps --no-build-isolation -e .
       - name: Lock file matches pyproject.toml
         run: |
           cp requirements/ci.txt fresh.txt

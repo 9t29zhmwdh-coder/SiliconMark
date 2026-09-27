@@ -24,7 +24,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install pinned build tools
-        run: pip install --require-hashes -r requirements/ci.txt
+        run: python -m pip install --require-hashes -r requirements/ci.txt
 
       - name: Build wheel and sdist
         run: python -m build --no-isolation
