@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.4] - 2026-09-30
+
+### Changed
+
+Dependency and CI updates merged since v1.1.3, each with green checks:
+
+- chore(ci): bump the actions group with 3 updates (#43)
+
+---
+
 ## [1.1.3] - 2026-09-27
 
 ### Security
