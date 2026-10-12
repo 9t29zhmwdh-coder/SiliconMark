@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "siliconmark"
-version = "1.1.5"
+version = "1.1.6"
 description = "Apple Silicon LLM Benchmark Suite: Ollama, llama.cpp, MLC, GGUF"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -25,7 +25,7 @@ dependencies = [
 [project.optional-dependencies]
 gguf = ["llama-cpp-python>=0.2"]
 mlc  = ["mlc-llm>=0.1"]
-dev  = ["pytest>=8", "pytest-asyncio>=0.23", "pytest-cov>=5", "ruff==0.16.1"]
+dev  = ["pytest>=8", "pytest-asyncio>=0.23", "pytest-cov>=5", "ruff==0.16.10"]
 
 [project.scripts]
 siliconmark = "siliconmark.cli:app"
